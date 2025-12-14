@@ -1,0 +1,96 @@
+[gd_scene load_steps=11 format=3 uid="uid://dvwdo8ltei2bv"]
+
+[ext_resource type="Script" uid="uid://drc0dbyhga6x4" path="res://enemy.gd" id="1_0xm2m"]
+[ext_resource type="Script" uid="uid://5mhnnqw53pge" path="res://bullet.gd" id="2_0xm2m"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_qp762"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_qp762"]
+size = Vector2(100, 100)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_osro4"]
+radius = 0.3
+height = 1.8
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ijqxc"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_e2mdg"]
+points = PackedVector3Array(-0.025, -0.0906111, -0.0165613, -0.00423355, -0.0498206, -0.0887773, 0.0249951, -0.0906111, -0.0165613, -0.025, -0.0906111, 0.0418211, -0.025, -3.77744e-06, -0.155856, 0.00422866, -0.0498206, -0.0887773, 0.0249951, -0.0906111, 0.0418211, 0.025, -3.77744e-06, -0.155856, -0.00443911, 0.066879, 0.029032, -0.025, 0.0611903, 0.0171168, -0.025, 0.0122285, -0.168091, 0.0249951, 0.0611903, 0.0171168, 0.00443422, 0.066879, 0.029032, 0.0249951, 0.0611903, -0.168091, 0.0249951, 0.0122285, -0.168091, -0.00443911, 0.0733239, 0.0225735, -0.00423355, 0.077352, -0.143472, -0.025, 0.0611903, -0.168091, -0.0178152, 0.0401127, -0.175914, -0.0164595, 0.0332896, -0.175914, -0.0125979, 0.0275023, -0.175914, -0.00681773, 0.0236551, -0.175914, 1.86265e-09, 0.0222905, -0.175914, 0.00422866, 0.077352, -0.143472, 0.00443422, 0.0733239, 0.0225735, 0.0178103, 0.0401127, -0.175914, 0.0164546, 0.0469194, -0.175914, 0.012593, 0.0527067, -0.175914, 0.00681284, 0.0565539, -0.175914, 1.86265e-09, 0.0579185, -0.175914, 0.00422866, 0.0773356, -0.149057, 0.00681284, 0.0236551, -0.175914, 0.012593, 0.0275023, -0.175914, 0.0164546, 0.0332896, -0.175914, -0.00423355, 0.0773356, -0.149057, -0.00681773, 0.0565539, -0.175914, -0.0125979, 0.0527067, -0.175914, -0.0164595, 0.0469194, -0.175914)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pdul2"]
+size = Vector3(0.1, 0.1, 0.2)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ji56y"]
+radius = 0.25
+
+[sub_resource type="SphereMesh" id="SphereMesh_ulkjm"]
+radius = 0.1
+height = 0.2
+
+[node name="Main" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 5)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.988531, 0.129757, -0.0772649, 0, 0.511623, 0.85921, 0.151019, 0.849356, -0.505755, 0, 0, 0)
+light_energy = 0.25
+light_bake_mode = 1
+shadow_enabled = true
+shadow_opacity = 0.9
+directional_shadow_split_1 = 0.01
+directional_shadow_split_2 = 0.125
+directional_shadow_blend_splits = true
+directional_shadow_fade_start = 1.0
+directional_shadow_max_distance = 300.0
+
+[node name="Ground" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("WorldBoundaryShape3D_qp762")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("PlaneMesh_qp762")
+skeleton = NodePath("../..")
+
+[node name="Enemy" type="RigidBody3D" parent="."]
+transform = Transform3D(-0.9987744, 0, -0.04949469, 0, 1, 0, 0.04949469, 0, -0.9987744, -5, 0, 0)
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+contact_monitor = true
+max_contacts_reported = 5
+script = ExtResource("1_0xm2m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_osro4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enemy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_ijqxc")
+
+[node name="Gun" type="RigidBody3D" parent="Enemy"]
+transform = Transform3D(1, 4.37114e-08, -8.74228e-08, -4.37114e-08, 1, -4.37114e-08, 8.74228e-08, 4.37114e-08, 1, 0.182, 0.05, -0.647)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemy/Gun"]
+shape = SubResource("ConvexPolygonShape3D_e2mdg")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enemy/Gun"]
+mesh = SubResource("BoxMesh_pdul2")
+
+[node name="Bullet" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 3, 0)
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("2_0xm2m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Bullet"]
+shape = SubResource("SphereShape3D_ji56y")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Bullet"]
+mesh = SubResource("SphereMesh_ulkjm")
+skeleton = NodePath("../..")
+
+[connection signal="body_entered" from="Bullet" to="Bullet" method="_on_body_entered"]
